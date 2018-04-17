@@ -50,11 +50,12 @@ if (empty($_SESSION['usuario']) || empty($_SESSION['senha'])) {
           var search = $(this).val();
           if(search != '')
           {
+           $( "#campo" ).empty();
            load_data(search);
           }
           else
           {
-          load_data();      
+          $( "#campo" ).empty();     
           }
         });
 
