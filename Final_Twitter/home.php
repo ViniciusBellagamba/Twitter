@@ -18,7 +18,7 @@ if (empty($_SESSION['usuario']) || empty($_SESSION['senha'])) {
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 
 
     <title>Twitter</title>
 
@@ -26,11 +26,41 @@ if (empty($_SESSION['usuario']) || empty($_SESSION['senha'])) {
 
 
       $(document).ready(function(){
+      //Inicio Ready
 
-      $.ajax({method: 'GET',url: "get.php"}).done(function( html ) {
+      $.ajax({url: "get.php"}).done(function(html) {
       $("#tweet_local").append(html);
-      }); 
+      });
 
+
+      function load_data(query)
+      {
+
+      $.ajax({
+        url: "get_pessoas.php", 
+        method: "POST",
+        data: { query : query } }).done(function(data){
+        $("#campo").append(data);
+
+      });
+
+      }
+
+        $('#txt_pessoa').keyup(function(){
+          var search = $(this).val();
+          if(search != '')
+          {
+           load_data(search);
+          }
+          else
+          {
+          load_data();      
+          }
+        });
+
+
+
+      //Fim Ready
       });
     
     </script>
@@ -47,8 +77,20 @@ if (empty($_SESSION['usuario']) || empty($_SESSION['senha'])) {
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav ml-auto">
-
             <li class="nav-item">
+              
+               
+                  <!--Aqui cego-->
+                 <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Buscar no Twitter" aria-label="Recipient's username" aria-describedby="basic-addon3" maxlength="140" id="txt_pessoa" name="txt_pessoa">
+                  <!--<div class="input-group-append">
+                    <button class="btn btn-secondary">Button</button>
+                  </div>-->
+
+                 
+
+            </li>
+            <li class="nav-item" style="margin-left: 7px">
               <a class="nav-link" href="sair.php">Sair</a>
             </li>
           </ul>
@@ -60,9 +102,9 @@ if (empty($_SESSION['usuario']) || empty($_SESSION['senha'])) {
     <div class="container">
 
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 col-xs-6">
           
-          <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+          <div class="card text-white bg-primary mb-3  text-center" style="max-width: 18rem;">
             <div class="card-header"><?= $_SESSION["usuario"]; ?></div>
               <div class="card-body">
                 <div class="row">
@@ -93,15 +135,13 @@ if (empty($_SESSION['usuario']) || empty($_SESSION['senha'])) {
             </div>
           </div>
 
-          <div class="tweet_local"></div>
+          <div id="tweet_local"></div>
 
         </div>
 
         <div class="col-md-3">
-          <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-              <h5><a href="" style="color: white">Procurar por Pessoa</a></h5>
-            </div>
+          <div id="campo">
+            <!--campo-->
           </div>
         </div>
 
